@@ -46,7 +46,7 @@ public class BookMstService {
 
 
     public String selectIsbn(String id){
-        Optional<BookMst> bookMstOptional = bookMstRepository.selectByIsbn(Long.parseLong(id));
+        Optional<BookMst> bookMstOptional = bookMstRepository.selectByIsbn(id);
         if(bookMstOptional.isPresent()){
             return bookMstOptional.get().getIsbn();
         
@@ -60,10 +60,13 @@ public class BookMstService {
         entity.setIsbn(bookMstDto.getIsbn());
         entity.setTitle(bookMstDto.getTitle());
         this.bookMstRepository.save(entity);
+
+        
+
     }
     
-    
-}
 
+   
+}
 
 
