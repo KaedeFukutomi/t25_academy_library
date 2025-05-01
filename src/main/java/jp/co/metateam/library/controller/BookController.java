@@ -96,22 +96,31 @@ public class BookController {
            if (bookMstService.selectIsbn(isbnHolder) != null && !bookMstService.selectIsbn(isbnHolder).isEmpty()) {
             result.rejectValue("isbn", "error.isbn.duplicate", "このISBNは既に登録済みです");
             hasError = true;
-        }
-           if (hasError) {
-               throw new Exception("バリデーションエラー");
+         
            }
-           
-           //
-           bookMstService.save(bookMstDto);
-           return "redirect:/book/index";
-       } catch (Exception e) {
-           log.error("書籍登録エラー: {}", e.getMessage());
-     
-           ra.addFlashAttribute("bookMstDto", bookMstDto);
-           ra.addFlashAttribute("org.springframework.validation.BindingResult.bookMstDto", result);
-           return "redirect:/book/add";
-       }
-    }
+        
+       
+           if (hasError) {
+            ra.addFlashAttribute("bookMstDto", bookMstDto);
+            ra.addFlashAttribute("org.springframework.validation.BindingResult.bookMstDto", result);
+            return "redirect:/book/add";  // エラー時に再度登録画面に戻る
+            }
+
+       
+            bookMstService.save(bookMstDto);
+            return "redirect:/book/index";
+
+          } catch (Exception e) {
+          log.error("書籍登録エラー: {}", e.getMessage());
+ 
+          ra.addFlashAttribute("bookMstDto", bookMstDto);
+          ra.addFlashAttribute("org.springframework.validation.BindingResult.bookMstDto", result);
+          return "redirect:/book/add";
+          }
+        }
 }
-     
+           
+
+
+
             
