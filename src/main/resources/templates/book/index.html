@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{common :: meta_header('書籍一覧',~{::link},~{::script})}">
@@ -13,10 +15,14 @@
             <div class="inner_contens">
                 <div class="page_title">書籍一覧</div>
                 <!-- 書籍登録ボタン -->
-                <a th:href="@{/book/add}">
-                    <button type="button">書籍登録</button>
-                </a>
+                <div class="div-right">
+                    <button class="register-button">書籍登録</button>
+                </div>
+            
+                  
+                
                 <!-- 書籍一覧テーブル -->
+                  
                 <table>
                     <thead>
                         <tr>
@@ -27,8 +33,12 @@
                     <tbody>
                         <tr th:each="book : ${bookMstList}">
                             <td th:text="${book.title}">書籍名</td>
+                            <button class="edit-button">
+                                <span class="pencil-icon"></span> 編集
+                              </button>
                             <td th:text="${book.isbn}">ISBN</td>
                         </tr>
+                      
                     </tbody>
                 </table>
             </div>

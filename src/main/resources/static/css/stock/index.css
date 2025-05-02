@@ -53,3 +53,9 @@
     justify-content: space-around;
     align-items: center;
 }
+
+table th{
+    color: black;
+    background: gray;
+  }
+   

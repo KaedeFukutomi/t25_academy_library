@@ -24,6 +24,34 @@
   font-size: 20px;
 }
 
+.register-button {
+  background: rgb(131, 238, 131);        /* 緑の背景 */
+  color: #000000;             /* 黒い文字 */
+  border: solid 1px rgb(160, 202, 98);  
+  padding: 13px ;         
+  font-size: 10px;           
+  text-align: center;         
+  cursor: pointer;            
+  border-radius: 5px;   
+}
+
+.edit-button:hover {
+  background: #0056b3;         /* ホバー時の濃い青 */
+}
+
+  
+.top-bar {
+  display: flex;
+  justify-content: flex-end; /* 右寄せ */
+  margin-bottom: 20px;
+
+}
+
+.register-button:hover {
+  background: #9ef5b1;       
+}
+
+
 .books_table td:nth-child(1){
   width: 40%;
 }
@@ -63,3 +91,23 @@
   color: #0000EE;
 }
 
+table th, table td {
+  border: solid 1px black;
+}
+
+table th{
+  color: black;
+  background: rgb(212, 208, 208);
+}
+
+table {
+  margin : auto;
+}
+
+.div-right {
+  /* margin : flex-end; 右寄せ */
+  text-align: right;
+}
+
+ 
+ 
