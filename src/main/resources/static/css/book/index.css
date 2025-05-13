@@ -10,7 +10,7 @@
   padding: 10px;
   background: rgba(0,0,0,0.06);
   padding: 13px;
-  border: solid 1px #B9B9B9;
+  border: solid 1pxgreen#B9B9B9;
   color: #545454;
   font-size: 18px;
 }
@@ -62,4 +62,52 @@
 .books_table td a{
   color: #0000EE;
 }
+
+table th, table td {
+  border: solid 1px black;
+}
+
+table th{
+  color: black;
+  background: rgb(194, 193, 193);
+}
+.button {
+  float: right; /* ボタンを右寄せ */
+  margin: 20px;       /* 必要に応じて余白を追加 */
+  background-color: rgb(191, 247, 191); /* 背景色を緑に */
+  color: black;           
+}
+
+/* 消去アイコンのスタイル */
+.trash_btn {
+  width: 13px;  /* 幅を24pxに設定 */
+  height: 15px; /* 高さを24pxに設定 */
+}
+
+/* 編集アイコンのスタイル */
+.edit_btn {
+  width: 13px;  /* 幅を24pxに設定 */
+  height: 15px; /* 高さを24pxに設定 */
+}
+
+
+  .submit_btn {
+    background-color: rgb(191, 247, 191); /* 背景色を緑に */
+    color: black;  /* 文字色を黒に */
+    margin: auto;  /* 自動でマージンを適用（中央寄せ） */
+  
+  }
+  
+table {
+  margin: auto;
+}
+
+.icon-row {
+  display: flex; 
+  margin: 0;
+  gap: 0;
+
+}
+
+
 
