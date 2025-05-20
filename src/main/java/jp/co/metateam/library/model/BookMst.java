@@ -1,7 +1,10 @@
 package jp.co.metateam.library.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,45 +18,68 @@ import jakarta.persistence.Table;
 /**
  * 書籍マスタ
  */
+
+
+
 @Entity
 @Table(name = "BookMst")
 public class BookMst {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    /** ISBN */
     @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
 
-    /** 書籍タイトル */
     @Column(name = "title", nullable = false)
     private String title;
 
-    /** 削除日時 */
-    @Column(name = "deleted_at")
-    private Timestamp deletedAt;
+    @Column(name = "deleted")
+    private boolean deleted;
 
-    /** Getters */
+    @Column(name = "created_At", nullable = false, insertable = false, updatable = false)
+    private Timestamp created_At;
 
+    @Column(name = "updated_At", nullable = false, insertable = false, updatable = false)
+    private Timestamp updated_At;
+
+    @Column(name = "deleted_At")
+    private Timestamp deleted_At;
+
+    // Getters and Setters
+    // Getters and Setters（クラス内のデータを安全に操作する））
+    // Getterとはフィールドの値を取得（get）するためのメソッド
+    // 通常、getフィールド名() という名前で作るが、boolean型のときは isフィールド名() を使う。
+    // Setterとは、フィールドの値を設定（set）するためのメソッド
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public String getIsbn() {
-        return this.isbn;
+        return isbn;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
-    public Timestamp getDeletedAt() {
-        return this.deletedAt;
+    public boolean getDeleted() {
+        return deleted;
     }
 
-    /** Setters */
+    public Timestamp getCreated_At() {
+        return created_At;
+    }
+
+    public Timestamp getUpdated_At() {
+        return updated_At;
+    }
+
+    public Timestamp getDeleted_At() {
+        return deleted_At;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -67,7 +93,20 @@ public class BookMst {
         this.title = title;
     }
 
-    public void setDeletedAt(Timestamp deletedAt) {
-        this.deletedAt = deletedAt;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
+
+    public void setCreated_At(Timestamp created_at) {
+        this.created_At = created_at;
+    }
+
+    public void setUpdated_At(Timestamp updated_at) {
+        this.updated_At = updated_at;
+    }
+
+    public void setDeleted_At(Timestamp deleted_at) {
+        this.deleted_At = deleted_at;
+    }
+
 }

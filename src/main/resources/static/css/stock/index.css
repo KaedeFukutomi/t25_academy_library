@@ -53,3 +53,10 @@
     justify-content: space-around;
     align-items: center;
 }
+
+.trash_btn img {
+    width: 10px;
+    height: 10px;
+    object-fit: contain;
+    vertical-align: middle;
+}

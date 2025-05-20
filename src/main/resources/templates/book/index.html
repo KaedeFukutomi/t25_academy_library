@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{common :: meta_header('書籍編集',~{::link},~{::script})}">
     <title th:text="${title}+' | MTLibrary'"></title>
     <link rel="stylesheet" th:href="@{/css/book/index.css}" />
@@ -20,6 +21,7 @@
 </div>
 
 </body>
+
 </html>
 
 <body>
@@ -29,39 +31,59 @@
             <div th:replace="~{common :: header}"></div>
             <div class="inner_contens">
                 <div class="page_title">書籍一覧</div>
+
                 <!-- 書籍登録ボタン -->
                 <a th:href="@{/book/add}">
                     <div class="button-container">
                         <button class="button">書籍登録</button>
-                      </div>
+                    </div>
                 </a>
-            
+
                 <!-- 書籍一覧テーブル -->
                 <table>
                     <thead>
-                       
+
                         <tr>
-                           
-                             <th colspan="2">書籍名</th>
-                             <th>ISBN</th>
+
+                            <th colspan="2">書籍名</th>
+                            <th>ISBN</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="book : ${bookMstList}">
                             <td>
-                                    <!-- 編集アイコン -->
-                                     <div class="icon-row">
-                                        <a th:href="@{/book/edit/{id}(id=${book.id})}" class="edit_btn">
-                                          <img class="edit_btn" th:src="@{/images/icons/edit.png}" alt="追加アイコン">
-                                        </a><a th:href="@{/book/trash}" class="trash_btn">
-                                          <img class="trash_btn" th:src="@{/images/icons/trash.png}">
-                                     </div>
-                                    </button>
+                                <!-- 編集・削除アイコンを横並びに配置 -->
+                                <div class="icon-row">
+
+                                    <!-- 編集ボタン -->
+                                    <a th:href="@{/book/edit/{id}(id=${book.id})}" class="edit_btn">
+                                        <img th:src="@{/images/icons/edit.png}" alt="編集"
+                                            style="width:13px; height:13px;">
+                                    </a>
+
+                                    <!-- 削除ボタン -->
+                                    <a href="#" th:onclick="|return confirmDelete(${book.id});|" class="trash_btn">
+                                        <img th:src="@{/images/icons/trash.png}" alt="削除"
+                                            style="width:13px; height:13px;">
+                                    </a>
 
 
-                           <td th:text="${book.title}">書籍名*</td>
-                        
+
+                                </div>
+
+                                <!-- JavaScript: 削除確認 -->
+                                <script>
+                                    function confirmDelete(bookId) {
+                                        if (confirm("本当に削除してよろしいですか？")) {
+                                            window.location.href = "/mt_library/book/delete/" + bookId;
+                                        }
+                                        return false;
+                                    }
+                                </script>
+
+                            <td th:text="${book.title}">書籍名*</td>
+
 
                             <td th:text="${book.isbn}">ISBN*</td>
 
@@ -73,4 +95,6 @@
     </div>
     <div th:replace="~{common :: footer}"></div>
 </body>
+
+
 
