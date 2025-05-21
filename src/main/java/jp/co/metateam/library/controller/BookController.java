@@ -28,19 +28,18 @@ public class BookController {
 
     private final BookMstService bookMstService;
 
-    
-@GetMapping("/book/delete/{id}")
-public String deleteBook(@PathVariable long id, RedirectAttributes redirectAttributes) {
-    boolean result = bookMstService.logicalDeleteById(id);
+    @GetMapping("/book/delete/{id}")
+    public String deleteBook(@PathVariable long id, RedirectAttributes redirectAttributes) {
+        boolean result = bookMstService.logicalDeleteById(id);
 
-    if (result) {
-        redirectAttributes.addFlashAttribute("message", "書籍を削除しました。");
-    } else {
-        redirectAttributes.addFlashAttribute("message", "この書籍はすでに消去されています。");
+        if (result) {
+            redirectAttributes.addFlashAttribute("message", "書籍を削除しました。");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "この書籍はすでに消去されています。");
+        }
+
+        return "redirect:/book/index"; // 一覧画面へ遷移
     }
-
-    return "redirect:/book/index"; // 一覧画面へ遷移
-}
 
     @Autowired
     public BookController(BookMstService bookMstService) {
@@ -99,15 +98,8 @@ public String deleteBook(@PathVariable long id, RedirectAttributes redirectAttri
             return "book/add";
         }
 
-        // try {
         bookMstService.save(bookMstDto);
-        // } catch (Exception e) {
 
-        // ra.addFlashAttribute("bookMstDto", bookMstDto);
-        // ra.addFlashAttribute("org.springframework.validation.BindingResult.bookMstDto",
-        // result);
-        // return "book/add";
-        // }
         return "redirect:/book/index";
     }
 

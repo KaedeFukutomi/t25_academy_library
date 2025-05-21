@@ -35,35 +35,23 @@ public class BookMstService {
 
     // 論理削除処理（削除フラグを true にする）
     public boolean logicalDeleteById(long id) {
-    //booleanにすることで、削除されているかどうかを確認することができる
+        // booleanにすることで、削除されているかどうかを確認することができる
         Optional<BookMst> optionalBook = bookMstRepository.findById(id);
 
         if (optionalBook.isPresent()) {
-        BookMst book = optionalBook.get();
+            BookMst book = optionalBook.get();
 
-        if (book.getDeleted()) {
-            return false; // すでに削除済み
+            if (book.getDeleted()) {
+                return false; // すでに削除済み
+            }
+
+            book.setDeleted(true); // 削除フラグをON
+            bookMstRepository.save(book);// 上書き保存
+            return true; // 削除成功
         }
 
-         book.setDeleted(true); // 削除フラグをON
-        bookMstRepository.save(book);//上書き保存
-        return true; // 削除成功
+        return false; // 書籍が見つからなかった
     }
-
-    return false; // 書籍が見つからなかった
-}
-
-    //     if (optionalBook.isPresent()) {
-    //         BookMst book = optionalBook.get();
-    //         book.setDeleted(true); // 削除フラグをON
-    //         bookMstRepository.save(book); // 上書き保存
-    //     }
-    // }
-
-    // // 削除フラグが false の書籍だけ取得
-    // public List<BookMst> findAllNonDeleted() {
-    //     return bookMstRepository.selectByDeletedFalse();
-    // }
 
     // 書籍一覧取得
     public List<BookMstDto> findAvailableWithStockCount() {
@@ -89,9 +77,7 @@ public class BookMstService {
         BookMst bookMst = new BookMst();
         bookMst.setTitle(bookMstDto.getTitle());
         bookMst.setIsbn(bookMstDto.getIsbn());
-        // bookMst.setCreated_At(bookMstDto.getCreated_At());
         bookMst.setDeleted_At(bookMstDto.getDeleted_At());
-        // bookMst.setUpdated_At(bookMstDto.getUpdated_At());
         // // その他の必要なフィールドを設定
         bookMstRepository.save(bookMst); // 保存処理
     }

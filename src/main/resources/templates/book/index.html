@@ -21,10 +21,11 @@
 </div>
 
 <!-- 削除メッセージ表示用 -->
-                    <script th:inline="javascript" th:if="${message}">
-                        alert([[${ message }]]);
-                    </script>
-<!-- 入れる場世によって画面の表示方法が少し違うので注意 -->
+<script th:inline="javascript" th:if="${message}">
+    alert([[${ message }]]);
+</script>
+<!-- ↑入れる場世によって画面の表示方法が少し違うので注意 -->
+エラーが出ているが、
 
 </body>
 
