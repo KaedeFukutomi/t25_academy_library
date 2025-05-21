@@ -20,6 +20,12 @@
     </script>
 </div>
 
+<!-- 削除メッセージ表示用 -->
+                    <script th:inline="javascript" th:if="${message}">
+                        alert([[${ message }]]);
+                    </script>
+<!-- 入れる場世によって画面の表示方法が少し違うので注意 -->
+
 </body>
 
 </html>
@@ -43,6 +49,7 @@
                 <table>
                     <thead>
 
+
                         <tr>
 
                             <th colspan="2">書籍名</th>
@@ -50,6 +57,7 @@
 
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr th:each="book : ${bookMstList}">
                             <td>
@@ -67,9 +75,6 @@
                                         <img th:src="@{/images/icons/trash.png}" alt="削除"
                                             style="width:13px; height:13px;">
                                     </a>
-
-
-
                                 </div>
 
                                 <!-- JavaScript: 削除確認 -->
@@ -81,6 +86,8 @@
                                         return false;
                                     }
                                 </script>
+
+
 
                             <td th:text="${book.title}">書籍名*</td>
 
@@ -95,6 +102,3 @@
     </div>
     <div th:replace="~{common :: footer}"></div>
 </body>
-
-
-

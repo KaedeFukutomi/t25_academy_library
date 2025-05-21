@@ -28,12 +28,19 @@ public class BookController {
 
     private final BookMstService bookMstService;
 
-    @GetMapping("/book/delete/{id}")
-    public String deleteBook(@PathVariable int id, RedirectAttributes redirectAttributes) {
-        bookMstService.logicalDeleteById(id);// 論理削除処理
+    
+@GetMapping("/book/delete/{id}")
+public String deleteBook(@PathVariable long id, RedirectAttributes redirectAttributes) {
+    boolean result = bookMstService.logicalDeleteById(id);
+
+    if (result) {
         redirectAttributes.addFlashAttribute("message", "書籍を削除しました。");
-        return "redirect:/book/index"; // 一覧画面にリダイレクト
+    } else {
+        redirectAttributes.addFlashAttribute("message", "この書籍はすでに消去されています。");
     }
+
+    return "redirect:/book/index"; // 一覧画面へ遷移
+}
 
     @Autowired
     public BookController(BookMstService bookMstService) {
