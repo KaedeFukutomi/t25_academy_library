@@ -1,9 +1,6 @@
 package jp.co.metateam.library.model;
 
-import java.security.Timestamp;
-
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +17,13 @@ public class BookMstDto {
 
     private String title;
     
-    private Timestamp deletedAt;
+    private boolean deleted;
+
+    private Timestamp updated_At;
+
+    private Timestamp created_At;
+
+    private Timestamp deleted_At;
 
     private BookMst bookMst;
 

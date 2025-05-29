@@ -3,15 +3,19 @@ package jp.co.metateam.library.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 import jp.co.metateam.library.model.BookMstDto;
+import jp.co.metateam.library.repository.BookMstRepository;
 import jp.co.metateam.library.service.BookMstService;
 import lombok.extern.log4j.Log4j2;
 
@@ -24,13 +28,26 @@ public class BookController {
 
     private final BookMstService bookMstService;
 
+    @GetMapping("/book/delete/{id}")
+    public String deleteBook(@PathVariable long id, RedirectAttributes redirectAttributes) {
+        boolean result = bookMstService.logicalDeleteById(id);
+
+        if (result) {
+            redirectAttributes.addFlashAttribute("message", "書籍を削除しました。");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "この書籍はすでに消去されています。");
+        }
+
+        return "redirect:/book/index"; // 一覧画面へ遷移
+    }
+
     @Autowired
     public BookController(BookMstService bookMstService) {
         this.bookMstService = bookMstService;
     }
 
     @GetMapping("/book/index")
-    public String index(Model model) {
+    public String indexPage(Model model) {
         // 書籍を全件取得
         List<BookMstDto> bookMstList = this.bookMstService.findAvailableWithStockCount();
 
@@ -81,14 +98,8 @@ public class BookController {
             return "book/add";
         }
 
-        try {
-            bookMstService.save(bookMstDto);
-        } catch (Exception e) {
+        bookMstService.save(bookMstDto);
 
-            ra.addFlashAttribute("bookMstDto", bookMstDto);
-            ra.addFlashAttribute("org.springframework.validation.BindingResult.bookMstDto", result);
-            return "book/add";
-        }
         return "redirect:/book/index";
     }
 
@@ -168,5 +179,7 @@ public class BookController {
             // raはRedirectAttributesの略
             return "redirect:/book/index";
         }
+
     }
+
 }

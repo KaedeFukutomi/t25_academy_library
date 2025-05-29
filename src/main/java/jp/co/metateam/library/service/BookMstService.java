@@ -3,8 +3,10 @@ package jp.co.metateam.library.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import jp.co.metateam.library.model.AccountDto;
 import jp.co.metateam.library.model.BookMst;
 import jp.co.metateam.library.model.BookMstDto;
 import jp.co.metateam.library.repository.BookMstRepository;
+//これからこのクラスを使います。とimportを用いてJavaに宣言している
 
 @Service
 public class BookMstService {
@@ -30,50 +33,53 @@ public class BookMstService {
         this.bookMstRepository = bookMstRepository;
     }
 
+    // 論理削除処理（削除フラグを true にする）
+    public boolean logicalDeleteById(long id) {
+        // booleanにすることで、削除されているかどうかを確認することができる
+        Optional<BookMst> optionalBook = bookMstRepository.findById(id);
+
+        if (optionalBook.isPresent()) {
+            BookMst book = optionalBook.get();
+
+            if (book.getDeleted()) {
+                return false; // すでに削除済み
+            }
+
+            book.setDeleted(true); // 削除フラグをON
+            bookMstRepository.save(book);// 上書き保存
+            return true; // 削除成功
+        }
+
+        return false; // 書籍が見つからなかった
+    }
+
+    // 書籍一覧取得
     public List<BookMstDto> findAvailableWithStockCount() {
-        List<BookMst> books = this.bookMstRepository.findLimitedBook();
-        List<BookMstDto> bookMstDtoList = new ArrayList<BookMstDto>();
+        List<BookMst> books = this.bookMstRepository.selectByDeletedFalse(); // 論理削除されていない書籍のみ
+        List<BookMstDto> dtoList = new ArrayList<>();
 
-        // 書籍の在庫数を取得
-        // FIXME: 現状は書籍ID毎にDBに問い合わせている。一度のSQLで完了させたい。
-        for (int i = 0; i < books.size(); i++) {
-            BookMst book = books.get(i);
-            BookMstDto bookMstDto = new BookMstDto();
-            bookMstDto.setId(book.getId());
-            bookMstDto.setIsbn(book.getIsbn());
-            bookMstDto.setTitle(book.getTitle());
-            bookMstDtoList.add(bookMstDto);
+        for (BookMst book : books) {
+            BookMstDto dto = new BookMstDto();
+            dto.setId(book.getId());
+            dto.setIsbn(book.getIsbn());
+            dto.setTitle(book.getTitle());
+            dtoList.add(dto);
         }
 
-        return bookMstDtoList;
+        return dtoList;
+
     }
 
-    public String serchIsbn(String isbn) {
-        Optional<BookMst> bookMstOptional = bookMstRepository.selectByIsbn(isbn);
-        if (bookMstOptional.isPresent()) {
-            return bookMstOptional.get().getIsbn();
-        }
-        return null;
-    }
-
-    @Transactional
-    // 処理中に異常が起こった場合は、更新が行われないように途中で変更を中止する処理を行う
+    // 書籍保存
     public void save(BookMstDto bookMstDto) {
-        BookMst entity;
-
-        if (bookMstDto.getId() != null) {
-            // 既存エンティティを取得して更新
-            entity = bookMstRepository.findById(bookMstDto.getId()).orElse(new BookMst());
-            entity.setId(bookMstDto.getId()); // 念のため
-        } else {
-            // 新規登録
-            entity = new BookMst();
-        }
-
-        entity.setTitle(bookMstDto.getTitle());
-        entity.setIsbn(bookMstDto.getIsbn());
-
-        bookMstRepository.save(entity);
+        // BookMstDtoをBookMstに変換して保存
+        // voidはなにも返さない処理
+        BookMst bookMst = new BookMst();
+        bookMst.setTitle(bookMstDto.getTitle());
+        bookMst.setIsbn(bookMstDto.getIsbn());
+        bookMst.setDeleted_At(bookMstDto.getDeleted_At());
+        // // その他の必要なフィールドを設定
+        bookMstRepository.save(bookMst); // 保存処理
     }
 
     public BookMstDto findById(Long id) {
@@ -89,9 +95,12 @@ public class BookMstService {
         return dto;
     }
 
-    public BookMst findByIsbn(String isbn) {
+    public String serchIsbn(String isbn) {
         Optional<BookMst> bookMstOptional = bookMstRepository.selectByIsbn(isbn);
-        return bookMstOptional.orElse(null);
+        if (bookMstOptional.isPresent()) {
+            return bookMstOptional.get().getIsbn();
+        }
+        return null;
     }
 
     public void update(BookMstDto bookMstDto) {
